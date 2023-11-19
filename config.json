@@ -1,0 +1,23 @@
+{
+	"trials_num": 10,
+	"query_groups": [
+		{
+			"group_id": 1,
+			"query": "SELECT * FROM nation;",
+			"partition": "default",
+			"sort": "default",
+			"insert_mode": "COW",
+			"delete_mode": "MOR",
+			"update_mode": "COW"
+		},
+		{
+			"group_id": 2,
+			"query": "SELECT * FROM nation;",
+			"partition": "default",
+			"sort": "default",
+			"insert_mode": "COW",
+			"delete_mode": "MOR",
+			"update_mode": "COW"
+		}
+	]
+}
