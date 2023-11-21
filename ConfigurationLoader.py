@@ -11,7 +11,7 @@ class ConfigurationLoader:
             data = yaml.safe_load(file)
 
         if 'groups' in data:
-            self.tables_properties = data['groups']
+            self.properties_groups = data['groups']
             # for group in data['groups']:
             #     for format in group['table_formats']:
             #         print(format)
@@ -19,12 +19,18 @@ class ConfigurationLoader:
             print("No 'groups' key found.")
 
     def get_table_properties(self, group_id, table_format):
-        return self.tables_properties[group_id]['table_formats'][table_format]
+        return self.properties_groups[group_id]['table_formats'][table_format]
+    
+    def get_groups_size(self):
+        return len(self.properties_groups)
         
+    def set_hive_table_props(self, group_id):
+        props = self.get_table_properties(group_id, 'hive')
+
             
 
 if __name__ == "__main__":
 
     conf_loader = ConfigurationLoader(file_name='config.yaml')
     conf_loader.parse_config_file()
-    print(conf_loader.get_table_properties(group_id=0, table_format='hive'))
+    print(conf_loader.get_groups_size())
