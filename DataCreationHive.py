@@ -100,7 +100,10 @@ schemas = [
 # Creating DataFrames
 def schema_to_table(schema, db, table_name):
     df = spark.createDataFrame([], schema=schema)
-    df.write.format('hive').partitionBy(PARTITIONING).mode("overwrite").saveAsTable(f"{db}.{table_name}")
+    df.write.format('hive') \
+    .partitionBy(PARTITIONING) \
+    .mode("overwrite") \
+    .saveAsTable(f"{db}.{table_name}") \
 
 for table in schemas:
     table_name = table[0]

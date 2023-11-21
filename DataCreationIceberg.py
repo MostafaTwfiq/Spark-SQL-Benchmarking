@@ -8,11 +8,11 @@ spark = SparkSession.builder.appName("DataCreationIceberg").getOrCreate()
 DELETE_MODE = 'merge-on-read'
 UPDATE_MODE= 'merge-on-read'
 MERGE_MODE = 'merge-on-read'
-PARTITIONING = ''
+# PARTITIONING = ''
 
 # Schema Definition
 schemas = [
-    ('lineitemSchema', StructType([
+    ('lineitem_ice', StructType([
         StructField("L_ORDERKEY", LongType()),
         StructField("L_PARTKEY", LongType()),
         StructField("L_SUPPKEY", LongType()),
@@ -30,7 +30,7 @@ schemas = [
         StructField("L_SHIPMODE", StringType()),
         StructField("L_COMMENT", StringType())
     ])),
-    ('partSchema', StructType([
+    ('part_ice', StructType([
         StructField("P_PARTKEY", IntegerType()),
         StructField("P_NAME", StringType()),
         StructField("P_MFGR", StringType()),
@@ -41,8 +41,7 @@ schemas = [
         StructField("P_RETAILPRICE", DoubleType()),
         StructField("P_COMMENT", StringType())
     ])),
-
-    ('supplierSchema', StructType([
+    ('supplier_ice', StructType([
         StructField("S_SUPPKEY", LongType()),
         StructField("S_NAME", StringType()),
         StructField("S_ADDRESS", StringType()),
@@ -51,29 +50,25 @@ schemas = [
         StructField("S_ACCTBAL", DoubleType()),
         StructField("S_COMMENT", StringType())
     ])),
-
-    ('partsuppSchema', StructType([
+    ('partsupp_ice', StructType([
         StructField("PS_PARTKEY", LongType()),
         StructField("PS_SUPPKEY", LongType()),
         StructField("PS_AVAILQTY", IntegerType()),
         StructField("PS_SUPPLYCOST", DoubleType()),
         StructField("PS_COMMENT", StringType())
     ])),
-
-    ('nationSchema', StructType([
+    ('nation_ice', StructType([
         StructField("N_NATIONKEY", IntegerType()),
         StructField("N_NAME", StringType()),
         StructField("N_REGIONKEY", IntegerType()),
         StructField("N_COMMENT", StringType())
     ])),
-
-    ('regionSchema', StructType([
+    ('region_ice', StructType([
         StructField("R_REGIONKEY", IntegerType()),
         StructField("R_NAME", StringType()),
         StructField("R_COMMENT", StringType())
     ])),
-
-    ('customerSchema', StructType([
+    ('customer_ice', StructType([
         StructField("C_CUSTKEY", LongType()),
         StructField("C_NAME", StringType()),
         StructField("C_ADDRESS", StringType()),
@@ -83,8 +78,7 @@ schemas = [
         StructField("C_MKTSEGMENT", StringType()),
         StructField("C_COMMENT", StringType())
     ])),
-
-    ('ordersSchema', StructType([
+    ('orders_ice', StructType([
         StructField("O_ORDERKEY", LongType()),
         StructField("O_CUSTKEY", LongType()),
         StructField("O_ORDERSTATUS", StringType()),
@@ -101,11 +95,11 @@ schemas = [
 def schema_to_table(schema, db, table_name):
     # global delete_mode, update_mode, merge_mode, PARTITIONING
     df = spark.createDataFrame([], schema=schema)
-    df.write.format('iceberg').partitionBy(PARTITIONING).mode("overwrite") \
-        .saveAsTable(f"{db}.{table_name}") \
+    df.write.format('iceberg').mode("overwrite") \
         .option("write.delete.mode", DELETE_MODE) \
         .option("write.update.mode", UPDATE_MODE) \
         .option("write.merge.mode", MERGE_MODE) \
+        .saveAsTable(f"{db}.{table_name}") \
            
 
 for table in schemas:
