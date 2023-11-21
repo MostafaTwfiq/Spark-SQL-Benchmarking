@@ -1,0 +1,17 @@
+# List of Analysis groups
+groups:
+  # Analysis group
+  - id: 0
+    table_formats: 
+      hive:
+        # list of tables' partitions
+        partition: 
+          - table_name: lineitem_hive
+            function: receiptdate
+      iceberg:
+        merge_mode: merge-on-read
+        update_mode: merge-on-read
+        delete_mode: merge-on-read
+        partition: 
+          - table_name: lineitem_ice
+            function: months(receiptdate)
