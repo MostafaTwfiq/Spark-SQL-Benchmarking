@@ -3,8 +3,9 @@ import yaml
 class ConfigurationLoader:
     def __init__(self, file_name):
         self.file_name = file_name
+        self.__parse_config_file()
 
-    def parse_config_file(self):
+    def __parse_config_file(self):
         # TODO: Log Here
         print(f'Parsing and Loading Configuration File.')
         with open(self.file_name, 'r') as file:
@@ -23,14 +24,14 @@ class ConfigurationLoader:
     
     def get_groups_size(self):
         return len(self.properties_groups)
-        
-    def set_hive_table_props(self, group_id):
-        props = self.get_table_properties(group_id, 'hive')
-
+    
             
 
 if __name__ == "__main__":
 
     conf_loader = ConfigurationLoader(file_name='config.yaml')
-    conf_loader.parse_config_file()
-    print(conf_loader.get_groups_size())
+    
+    len = conf_loader.get_groups_size()
+    for i in range(len):
+        hive_props = conf_loader.get_table_properties(i, 'hive')
+        iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
