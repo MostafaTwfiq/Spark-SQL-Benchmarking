@@ -1,16 +1,14 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, LongType, IntegerType, DoubleType, StringType
 from schemas import schemas
 
 # Create a Spark session
 spark = SparkSession.builder.appName("DataCreationIceberg").getOrCreate()
 
 # CHANGE HERE!
-DELETE_MODE = 'merge-on-read'
-UPDATE_MODE= 'merge-on-read'
-MERGE_MODE = 'merge-on-read'
-# PARTITIONING = ''
-partitioning_dict = {}
+DELETE_MODE = '[DELETE_MODE]'
+UPDATE_MODE= '[UPDATE_MODE]'
+MERGE_MODE = '[MERGE_MODE]'
+partitioning_dict = '[partitioning_dict]'
 
 # Creating DataFrames
 def schema_to_table(schema, db, table_name, partitioning=''):
