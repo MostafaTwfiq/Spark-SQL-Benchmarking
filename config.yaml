@@ -6,12 +6,11 @@ groups:
       hive:
         # list of tables' partitions
         partition: 
-          - table_name: lineitem_hive
-            function: receiptdate
+          # Table name: Partition By 
+          lineitem_hive: receiptdate
       iceberg:
         merge_mode: merge-on-read
         update_mode: merge-on-read
         delete_mode: merge-on-read
         partition: 
-          - table_name: lineitem_ice
-            function: months(receiptdate)
+          lineitem_ice: months(receiptdate)
