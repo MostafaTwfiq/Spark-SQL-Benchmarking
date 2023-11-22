@@ -1,22 +1,20 @@
 import subprocess
 
 class DataGeneration:
-    def __init__(self, scale_factor=5, data_folder='data'):
+    def __init__(self, scale_factor=5):
         self.scale_factor = scale_factor
-        self.data_folder = data_folder
 
 
-    def generate_data(self):
+    def generate_data(self, data_folder='data'):
         # TODO: Log Here
         print(f"Generating Data with Scale Factor = {self.scale_factor}")
-        self.__precheck_data_directory()
+        self.__precheck_data_directory(data_folder)
         
-        generate_cmd = f'cd ./tpch-dbgen/{self.data_folder} && ./dbgen -s {self.scale_factor}'
+        generate_cmd = f'cd ./tpch-dbgen/{data_folder} && ./dbgen -s {self.scale_factor}'
         self.__execute_command(generate_cmd, 'Data Generation')
 
 
-    def __precheck_data_directory(self):
-        dir_name = self.data_folder
+    def __precheck_data_directory(self, dir_name):
         # Remove Old Data Folder, If exists
         remove_cmd = f'rm -r ./tpch-dbgen/{dir_name}'
         self.__execute_command(remove_cmd, 'Data Directory Deletion')
@@ -46,5 +44,5 @@ class DataGeneration:
 
 if __name__ == "__main__":
 
-    data_generator = DataGeneration(scale_factor=1, data_folder='data')
-    data_generator.generate_data()
+    data_generator = DataGeneration(scale_factor=1)
+    data_generator.generate_data(data_folder='data')
