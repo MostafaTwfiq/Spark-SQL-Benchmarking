@@ -4,7 +4,7 @@ from pyspark.sql.types import StructType, StructField, LongType, IntegerType, Do
 # Create a Spark session
 spark = SparkSession.builder.appName("DataCreationHive").getOrCreate()
 
-partitioning_dict = #partitioning_dict
+partitioning_dict = '[partitioning_dict]'
 
 # Schema Definition
 schemas = [

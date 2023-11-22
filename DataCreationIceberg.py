@@ -5,10 +5,10 @@ from pyspark.sql.types import StructType, StructField, LongType, IntegerType, Do
 spark = SparkSession.builder.appName("DataCreationIceberg").getOrCreate()
 
 # CHANGE HERE!
-DELETE_MODE = #delete_mode
-UPDATE_MODE= #update_mode
-MERGE_MODE = #merge_mode
-partitioning_dict = #partitioning_dict
+DELETE_MODE = '[DELETE_MODE]'
+UPDATE_MODE= '[UPDATE_MODE]'
+MERGE_MODE = '[MERGE_MODE]'
+partitioning_dict = '[partitioning_dict]'
 
 # Schema Definition
 schemas = [
