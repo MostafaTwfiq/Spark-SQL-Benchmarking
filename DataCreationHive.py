@@ -11,13 +11,12 @@ partitioning_dict = '[partitioning_dict]'
 def schema_to_table(schema, file_path, table_name, partitioning=''):
     # df = spark.createDataFrame([], schema=schema)
     df = spark.read.csv(file_path, sep='|', schema=schema)
-    df.write.format('hive')
+    df.write.format('parquet')
     
     if partitioning != '':
         df.partitionBy(partitioning)
     
     df.mode("overwrite") \
-    .format('parquet') \
     .saveAsTable(f"iceberg_temp.{table_name}")
 
 for table in schemas:

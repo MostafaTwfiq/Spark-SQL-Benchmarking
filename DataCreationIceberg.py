@@ -11,7 +11,7 @@ MERGE_MODE = '[MERGE_MODE]'
 partitioning_dict = '[partitioning_dict]'
 
 # Creating DataFrames
-def schema_to_table(schema, db, table_name, partitioning=''):
+def schema_to_table(schema, file_path, table_name, partitioning=''):
     # global delete_mode, update_mode, merge_mode, PARTITIONING
     # df = spark.createDataFrame([], schema=schema)
     df = spark.read.csv(file_path, sep='|', schema=schema)
@@ -24,7 +24,7 @@ def schema_to_table(schema, db, table_name, partitioning=''):
     .option("write.delete.mode", DELETE_MODE) \
     .option("write.update.mode", UPDATE_MODE) \
     .option("write.merge.mode", MERGE_MODE) \
-    .saveAsTable(f"{db}.{table_name}")
+    .saveAsTable(f"iceberg_temp.{table_name}")
            
 
 for table in schemas:
