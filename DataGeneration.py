@@ -1,8 +1,9 @@
 import subprocess
 
 class DataGeneration:
-    def __init__(self, scale_factor=5):
+    def __init__(self, scale_factor=5, data_folder='data'):
         self.scale_factor = scale_factor
+        self.data_folder = data_folder
 
 
     def generate_data(self):
@@ -10,22 +11,23 @@ class DataGeneration:
         print(f"Generating Data with Scale Factor = {self.scale_factor}")
         self.__precheck_data_directory()
         
-        generate_cmd = f'cd ./tpch-dbgen/data && ./dbgen -s {self.scale_factor}'
+        generate_cmd = f'cd ./tpch-dbgen/{self.data_folder} && ./dbgen -s {self.scale_factor}'
         self.__execute_command(generate_cmd, 'Data Generation')
 
 
     def __precheck_data_directory(self):
+        dir_name = self.data_folder
         # Remove Old Data Folder, If exists
-        remove_cmd = 'rm -r ./tpch-dbgen/data'
+        remove_cmd = f'rm -r ./tpch-dbgen/{dir_name}'
         self.__execute_command(remove_cmd, 'Data Directory Deletion')
         
-        make_dir_cmd = 'mkdir ./tpch-dbgen/data'
+        make_dir_cmd = f'mkdir ./tpch-dbgen/{dir_name}'
         self.__execute_command(make_dir_cmd, 'Data Directory Deletion')
 
-        copy_cmd = 'cp ./tpch-dbgen/dbgen ./tpch-dbgen/data'
+        copy_cmd = f'cp ./tpch-dbgen/dbgen ./tpch-dbgen/{dir_name}'
         self.__execute_command(copy_cmd, 'dbgen executable file Copy')
 
-        copy_cmd = 'cp ./tpch-dbgen/dists.dss ./tpch-dbgen/data'
+        copy_cmd = f'cp ./tpch-dbgen/dists.dss ./tpch-dbgen/{dir_name}'
         self.__execute_command(copy_cmd, 'dists.dss file Copy')
 
 
@@ -44,6 +46,5 @@ class DataGeneration:
 
 if __name__ == "__main__":
 
-    data_generator = DataGeneration(scale_factor=1)
-
+    data_generator = DataGeneration(scale_factor=1, data_folder='data')
     data_generator.generate_data()
