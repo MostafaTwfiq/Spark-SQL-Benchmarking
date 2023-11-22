@@ -5,9 +5,6 @@ from pyspark.sql.types import StructType, StructField, LongType, IntegerType, Do
 spark = SparkSession.builder.appName("DataCreationHive").getOrCreate()
 
 # CHANGE HERE!
-DELETE_MODE = 'merge-on-read'
-UPDATE_MODE= 'merge-on-read'
-MERGE_MODE = 'merge-on-read'
 PARTITIONING = ''
 
 # Schema Definition
