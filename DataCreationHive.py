@@ -4,11 +4,7 @@ from pyspark.sql.types import StructType, StructField, LongType, IntegerType, Do
 # Create a Spark session
 spark = SparkSession.builder.appName("DataCreationHive").getOrCreate()
 
-# CHANGE HERE!
-DELETE_MODE = 'merge-on-read'
-UPDATE_MODE= 'merge-on-read'
-MERGE_MODE = 'merge-on-read'
-PARTITIONING = ''
+partitioning_dict = #partitioning_dict
 
 # Schema Definition
 schemas = [
@@ -98,17 +94,23 @@ schemas = [
 ]
 
 # Creating DataFrames
-def schema_to_table(schema, db, table_name):
+def schema_to_table(schema, db, table_name, partitioning=''):
     df = spark.createDataFrame([], schema=schema)
-    df.write.format('hive') \
-    .partitionBy(PARTITIONING) \
-    .mode("overwrite") \
+    table = df.write.format('hive') 
+
+    if partitioning != '':
+        table = table.partitionBy(partitioning) 
+
+    table.mode("overwrite") \
     .saveAsTable(f"{db}.{table_name}") \
 
 for table in schemas:
     table_name = table[0]
     schema = table[1]
-    schema_to_table(schema, 'iceberg_temp', table_name)
+    if table_name in partitioning_dict:
+        schema_to_table(schema, 'iceberg_temp', table_name, partitioning_dict[table_name])
+    else:
+        schema_to_table(schema, 'iceberg_temp', table_name)
 
 # Stop the Spark session
 spark.stop()
