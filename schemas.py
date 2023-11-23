@@ -1,7 +1,7 @@
 from pyspark.sql.types import StructType, StructField, LongType, IntegerType, DoubleType, StringType
 
 schemas = [
-    ('lineitem_hive',
+    ('lineitem',
      "lineitem.tbl",
      StructType([
         StructField("L_ORDERKEY", LongType()),
@@ -21,7 +21,7 @@ schemas = [
         StructField("L_SHIPMODE", StringType()),
         StructField("L_COMMENT", StringType())
     ])),
-    ('part_hive',
+    ('part',
      "part.tbl",
      StructType([
         StructField("P_PARTKEY", IntegerType()),
@@ -35,7 +35,7 @@ schemas = [
         StructField("P_COMMENT", StringType())
     ])),
 
-    ('supplier_hive',
+    ('supplier',
      "supplier.tbl",
      StructType([
         StructField("S_SUPPKEY", LongType()),
@@ -47,7 +47,7 @@ schemas = [
         StructField("S_COMMENT", StringType())
     ])),
 
-    ('partsupp_hive',
+    ('partsupp',
      "partsupp.tbl",
      StructType([
         StructField("PS_PARTKEY", LongType()),
@@ -57,7 +57,7 @@ schemas = [
         StructField("PS_COMMENT", StringType())
     ])),
 
-    ('nation_hive',
+    ('nation',
      "nation.tbl",
      StructType([
         StructField("N_NATIONKEY", IntegerType()),
@@ -66,7 +66,7 @@ schemas = [
         StructField("N_COMMENT", StringType())
     ])),
 
-    ('region_hive',
+    ('region',
      "region.tbl",
      StructType([
         StructField("R_REGIONKEY", IntegerType()),
@@ -74,7 +74,7 @@ schemas = [
         StructField("R_COMMENT", StringType())
     ])),
 
-    ('customer_hive',
+    ('customer',
      "customer.tbl",
      StructType([
         StructField("C_CUSTKEY", LongType()),
@@ -87,7 +87,7 @@ schemas = [
         StructField("C_COMMENT", StringType())
     ])),
 
-    ('orders_hive',
+    ('orders',
      "orders.tbl",
      StructType([
         StructField("O_ORDERKEY", LongType()),

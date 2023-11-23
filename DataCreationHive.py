@@ -20,7 +20,7 @@ def schema_to_table(schema, file_path, table_name, partitioning=''):
     .saveAsTable(f"iceberg_temp.{table_name}")
 
 for table in schemas:
-    table_name = table[0]
+    table_name = table[0] + "_hive"
     file_path = table[1]
     schema = table[2]
     if table_name in partitioning_dict.keys():    
