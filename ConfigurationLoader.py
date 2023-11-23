@@ -1,16 +1,17 @@
 import yaml
 
 class ConfigurationLoader:
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self, conf_path):
+        self.conf_path = conf_path
         self.__parse_config_file()
 
     def __parse_config_file(self):
         # TODO: Log Here
         print(f'Parsing and Loading Configuration File.')
-        with open(self.file_name, 'r') as file:
+        with open(self.conf_path, 'r') as file:
             data = yaml.safe_load(file)
 
+        self.connections = data['connections']
         if 'groups' in data:
             self.properties_groups = data['groups']
             # for group in data['groups']:
@@ -25,12 +26,22 @@ class ConfigurationLoader:
     def get_groups_size(self):
         return len(self.properties_groups)
     
+    def get_spark_connection(self):
+        return self.connections['spark']
+    
+    def get_hive_connection(self):
+        return self.connections['hive']
+    
+    def get_iceberg_connection(self):
+        return self.connections['iceberg']
+    
             
 
 if __name__ == "__main__":
-
-    conf_loader = ConfigurationLoader(file_name='config.yaml')
-    
+    conf_loader = ConfigurationLoader(conf_path='config.yaml')
+    print(conf_loader.get_spark_connection())
+    print(conf_loader.get_hive_connection())
+    print(conf_loader.get_iceberg_connection())
     len = conf_loader.get_groups_size()
     for i in range(len):
         hive_props = conf_loader.get_table_properties(i, 'hive')

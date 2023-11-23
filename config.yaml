@@ -1,7 +1,19 @@
+#connection properties
+connections:
+  spark:
+    ip: localhost
+    port: 4040
+  hive:
+    ip: localhost
+    port: 9090
+  iceberg:
+    ip: localhost
+    port: 8080
 # List of Analysis groups
 groups:
   # Analysis group
   - id: 0
+    database_scale_factor: 3
     table_formats: 
       hive:
         # list of tables' partitions
