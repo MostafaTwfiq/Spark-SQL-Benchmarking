@@ -12,13 +12,7 @@ class ConfigurationLoader:
             data = yaml.safe_load(file)
 
         self.connections = data['connections']
-        if 'groups' in data:
-            self.properties_groups = data['groups']
-            # for group in data['groups']:
-            #     for format in group['table_formats']:
-            #         print(format)
-        else:
-            print("No 'groups' key found.")
+        self.properties_groups = data['groups']
 
     def get_table_properties(self, group_id, table_format):
         return self.properties_groups[group_id]['table_formats'][table_format]
