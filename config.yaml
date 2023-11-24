@@ -6,9 +6,11 @@ connections:
   hive:
     ip: localhost
     port: 9090
-  iceberg:
+  hdfs:
     ip: localhost
     port: 8080
+  iceberg:
+    iceberg_warehouse: /warehouse/tablespace/external/hive/iceberg_temp.db
 #tpch properties
 tpch:
   generation_path: './data'

@@ -33,8 +33,11 @@ class ConfigurationLoader:
     def get_hive_connection(self):
         return self.connections['hive']
     
-    def get_iceberg_connection(self):
-        return self.connections['iceberg']
+    def get_hdfs_connection(self):
+        return self.connections['hdfs']
+    
+    def get_iceberg_warehouse(self):
+        return self.connections['iceberg']['iceberg_warehouse']
     
             
 
@@ -42,10 +45,11 @@ if __name__ == "__main__":
     conf_loader = ConfigurationLoader(conf_path='config.yaml')
     print(conf_loader.get_spark_connection())
     print(conf_loader.get_hive_connection())
-    print(conf_loader.get_iceberg_connection())
     len = conf_loader.get_groups_size()
     print(conf_loader.get_tpch_generation_path())
     print(conf_loader.get_tpch_db_scale_factor())
+    print(conf_loader.get_hdfs_connection())
+    print(conf_loader.get_iceberg_warehouse())
     for i in range(len):
         hive_props = conf_loader.get_table_properties(i, 'hive')
         iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
