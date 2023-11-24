@@ -9,11 +9,14 @@ connections:
   iceberg:
     ip: localhost
     port: 8080
+#tpch properties
+tpch:
+  generation_path: './data'
+  database_scale_factor: 3
 # List of Analysis groups
 groups:
   # Analysis group
   - id: 0
-    database_scale_factor: 3
     table_formats: 
       hive:
         # list of tables' partitions

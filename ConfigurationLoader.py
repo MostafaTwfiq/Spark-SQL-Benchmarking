@@ -12,13 +12,17 @@ class ConfigurationLoader:
             data = yaml.safe_load(file)
 
         self.connections = data['connections']
+        self.tpch = data['tpch']
         self.properties_groups = data['groups']
 
     def get_table_properties(self, group_id, table_format):
         return self.properties_groups[group_id]['table_formats'][table_format]
     
-    def get_properties_group_db_scale_factor(self, group_id):
-        return self.properties_groups[group_id]['database_scale_factor']
+    def get_tpch_generation_path(self):
+        return self.tpch['generation_path']
+    
+    def get_tpch_db_scale_factor(self):
+        return self.tpch['database_scale_factor']
     
     def get_groups_size(self):
         return len(self.properties_groups)
@@ -40,7 +44,8 @@ if __name__ == "__main__":
     print(conf_loader.get_hive_connection())
     print(conf_loader.get_iceberg_connection())
     len = conf_loader.get_groups_size()
-    print(conf_loader.get_properties_group_db_scale_factor(0))
+    print(conf_loader.get_tpch_generation_path())
+    print(conf_loader.get_tpch_db_scale_factor())
     for i in range(len):
         hive_props = conf_loader.get_table_properties(i, 'hive')
         iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
