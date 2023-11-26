@@ -2,12 +2,15 @@ import os
 import json
 
 class TableManipulator:
+
+    def __init__(self):
+        self.TEMPLATE_QUERY = "[QUERY]"
         
     def set_properties(self):
         pass
 
-    def set_query(self):
-        pass
+    def set_query(self, query):
+        self.replace_words_in_file('Query.py', [(self.TEMPLATE_QUERY, query)])
 
     def replace_words_in_file(self, file_path, modifications):
         # Read the content of the file
@@ -28,49 +31,87 @@ class TableManipulator:
 
 class HiveManipulator(TableManipulator):
 
+    def __init__(self):
+        super().__init__()
+        self.TEMPLATE_PARTITION = "'[partitioning_dict]'"
+
+
     def set_properties(self, table_properties):
-        self.replace_words_in_file('DataCreationHive.py', [("'[partitioning_dict]'", 
-                                  json.dumps(table_properties['partition']))])
+        partitioning_dict = self.__extract_or_default_properties(table_properties) 
+
+        self.replace_words_in_file('DataCreationHive.py', 
+                                   [(self.TEMPLATE_PARTITION, partitioning_dict)])
         
-    def set_query(self, query):
-        self.replace_words_in_file('QueryHive.py', [("[QUERY]", query)])
+
+    def __extract_or_default_properties(self, table_properties):
+        partitioning_dict = '{}'
+
+        if table_properties['partition'] is not None:
+            partitioning_dict = json.dumps(table_properties['partition'])
+        
+        return partitioning_dict
 
 
 
 class IcebergManipulator(TableManipulator):
 
+    def __init__(self):
+        super().__init__()
+        self.TEMPLATE_PARTITION = "'[partitioning_dict]'"
+        self.TEMPLATE_DELETE_MODE = '[DELETE_MODE]'
+        self.TEMPLATE_UPDATE_MODE = '[UPDATE_MODE]'
+        self.TEMPLATE_MERGE_MODE = '[MERGE_MODE]'
+
+
     def set_properties(self, table_properties):
-        modifications = [("'[partitioning_dict]'", 
-                              json.dumps(table_properties['partition'])), 
-                              ('[DELETE_MODE]', table_properties['delete_mode']),
-                              ('[UPDATE_MODE]', table_properties['update_mode']),
-                              ('[MERGE_MODE]', table_properties['merge_mode'])]
+        partitioning_dict, delete_mode, update_mode, merge_mode \
+            = self.__extract_or_default_properties(table_properties) 
+        
+        modifications = [(self.TEMPLATE_PARTITION, partitioning_dict), 
+                         (self.TEMPLATE_DELETE_MODE, delete_mode),
+                         (self.TEMPLATE_UPDATE_MODE, update_mode),
+                         (self.TEMPLATE_MERGE_MODE, merge_mode)]
         
         self.replace_words_in_file('DataCreationIceberg.py', modifications)
-        
-        
-    def set_query(self, query):
-        self.replace_words_in_file('QueryIceberg.py', [("[QUERY]", query)])
-        
 
-# from ConfigurationLoader import ConfigurationLoader;
 
-# if __name__ == "__main__":
+    def __extract_or_default_properties(self, table_properties):
+        delete_mode = update_mode = merge_mode = 'merge-on-read'
+        partitioning_dict = '{}'
 
-#     conf_loader = ConfigurationLoader(file_name='config.yaml')
+        if table_properties['partition'] is not None:
+            partitioning_dict = json.dumps(table_properties['partition'])
+
+        if 'delete_mode' in table_properties:
+            delete_mode = table_properties['delete_mode']
+
+        if 'update_mode' in table_properties:
+            update_mode = table_properties['update_mode']            
+
+        if 'merge_mode' in table_properties:
+            merge_mode = table_properties['merge_mode']
+
+        return partitioning_dict, delete_mode, update_mode, merge_mode
+
+            
+
+from ConfigurationLoader import ConfigurationLoader;
+
+if __name__ == "__main__":
+
+    conf_loader = ConfigurationLoader(conf_path='./config.yaml')
     
-#     len = conf_loader.get_groups_size()
-#     for i in range(len):
-#         hive_props = conf_loader.get_table_properties(i, 'hive')
-#         hive_loader = HiveManipulator()
-#         hive_loader.set_properties(hive_props)
-#         hive_loader.set_query("select * from nation;")
+    len = conf_loader.get_groups_size()
+    for i in range(len):
+        hive_props = conf_loader.get_table_properties(i, 'hive')
+        hive_loader = HiveManipulator()
+        hive_loader.set_properties(hive_props)
+        hive_loader.set_query("select * from nation;")
 
-#         iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
-#         iceberg_loader = IcebergManipulator()
-#         print(iceberg_props)
-#         iceberg_loader.set_properties(iceberg_props)
-#         iceberg_loader.set_query("select * from nation;")
+        iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
+        iceberg_loader = IcebergManipulator()
+        iceberg_loader.set_properties(iceberg_props)
+        iceberg_loader.set_query("select * from nation;")
 
 
     
