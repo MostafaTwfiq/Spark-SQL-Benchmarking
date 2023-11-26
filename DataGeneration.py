@@ -20,7 +20,7 @@ class DataGeneration:
         self.__execute_command(remove_cmd, 'Data Directory Deletion')
         
         make_dir_cmd = f'mkdir {data_path}'
-        self.__execute_command(make_dir_cmd, 'Data Directory Deletion')
+        self.__execute_command(make_dir_cmd, 'Data Directory Creation')
 
         copy_cmd = f'cp ./tpch-dbgen/dbgen {data_path}'
         self.__execute_command(copy_cmd, 'dbgen executable file Copy')
@@ -35,7 +35,7 @@ class DataGeneration:
         
         # TODO: Log Here
         if result.returncode == 0:
-            print(f"{process} Succeeded. Output:\n{result.stdout}")
+            print(f"{process} Succeeded.")
         else:
             print(f"{process} Failed. Output:\n{result.stdout}")
                 
