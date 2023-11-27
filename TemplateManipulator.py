@@ -12,7 +12,7 @@ class TemplateManipulator:
         pass
 
     def set_query(self, query):
-        self.replace_words_in_file('Query.py', {self.QUERY_PLACEHOLDER: query})
+        pass
 
     def replace_words_in_file(self, file_path, modifications):
         # Read the content of the file
@@ -52,6 +52,9 @@ class HiveManipulator(TemplateManipulator):
             partitioning_dict = json.dumps(table_properties['partition'])
         
         return partitioning_dict
+    
+    def set_query(self, query):
+        self.replace_words_in_file('QueryHive.py', {self.QUERY_PLACEHOLDER: query})
 
 
 
@@ -95,7 +98,9 @@ class IcebergManipulator(TemplateManipulator):
 
         return partitioning_dict, delete_mode, update_mode, merge_mode
 
-            
+    def set_query(self, query):
+        self.replace_words_in_file('QueryIceberg.py', {self.QUERY_PLACEHOLDER: query})        
+    
 
 # from ConfigurationLoader import ConfigurationLoader;
 
@@ -108,6 +113,7 @@ class IcebergManipulator(TemplateManipulator):
 #         hive_props = conf_loader.get_table_properties(i, 'hive')
 #         hive_loader = HiveManipulator()
 #         hive_loader.set_creation_template_properties(hive_props)
+#         hive_loader.set_query("select * from nation;")
 
 #         iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
 #         iceberg_loader = IcebergManipulator()
