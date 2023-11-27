@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from schemas import schemas
 import sys
+import os
 
 # Specify the Hive server host
 hive_host = sys.argv[1]      # 192.168.168.91
@@ -19,7 +20,8 @@ spark = SparkSession.builder.appName("DataCreationHive") \
 
 
 # CHANGE HERE!
-partitioning_dict = {{partitioning_dict}}
+PARTITIONING_DICT = {{PARTITIONING_DICT}}
+GENERATE_TABLES_FOLDER = '{{GENERATED_TABLES_FOLDER}}'
 
 # Creating DataFrames
 def schema_to_table(schema, file_path, table_name, partitioning=''):
@@ -31,14 +33,14 @@ def schema_to_table(schema, file_path, table_name, partitioning=''):
         df.partitionBy(partitioning)
     
     df.mode("overwrite") \
-    .saveAsTable(f"iceberg_temp.{table_name}")
+    .saveAsTable(f"{hive_database}.{table_name}")
 
 for table in schemas:
     table_name = table[0] + "_hive"
-    file_path = table[1]
+    file_path = os.path.join(GENERATE_TABLES_FOLDER, table[1])
     schema = table[2]
-    if table_name in partitioning_dict.keys():    
-        schema_to_table(schema, file_path, table_name, partitioning_dict[table_name])
+    if table_name in PARTITIONING_DICT.keys():    
+        schema_to_table(schema, file_path, table_name, PARTITIONING_DICT[table_name])
     else:
         schema_to_table(schema, file_path, table_name)
 
