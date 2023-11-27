@@ -97,19 +97,19 @@ class IcebergManipulator(TemplateManipulator):
 
             
 
-from ConfigurationLoader import ConfigurationLoader;
+# from ConfigurationLoader import ConfigurationLoader;
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    conf_loader = ConfigurationLoader(conf_path='./config.yaml')
+#     conf_loader = ConfigurationLoader(conf_path='./config.yaml')
     
-    len = conf_loader.get_groups_size()
-    for i in range(len):
-        hive_props = conf_loader.get_table_properties(i, 'hive')
-        hive_loader = HiveManipulator()
-        hive_loader.set_creation_template_properties(hive_props)
+#     len = conf_loader.get_groups_size()
+#     for i in range(len):
+#         hive_props = conf_loader.get_table_properties(i, 'hive')
+#         hive_loader = HiveManipulator()
+#         hive_loader.set_creation_template_properties(hive_props)
 
-        iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
-        iceberg_loader = IcebergManipulator()
-        iceberg_loader.set_creation_template_properties(iceberg_props)
-        iceberg_loader.set_query("select * from nation;")
+#         iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
+#         iceberg_loader = IcebergManipulator()
+#         iceberg_loader.set_creation_template_properties(iceberg_props)
+#         iceberg_loader.set_query("select * from nation;")
