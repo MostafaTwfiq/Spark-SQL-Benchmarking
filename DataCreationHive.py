@@ -5,7 +5,7 @@ from schemas import schemas
 spark = SparkSession.builder.appName("DataCreationHive").getOrCreate()
 
 # CHANGE HERE!
-partitioning_dict = '[partitioning_dict]'
+partitioning_dict = {{partitioning_dict}}
 
 # Creating DataFrames
 def schema_to_table(schema, file_path, table_name, partitioning=''):

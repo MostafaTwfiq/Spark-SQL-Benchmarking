@@ -5,10 +5,10 @@ from schemas import schemas
 spark = SparkSession.builder.appName("DataCreationIceberg").getOrCreate()
 
 # CHANGE HERE!
-DELETE_MODE = '[DELETE_MODE]'
-UPDATE_MODE= '[UPDATE_MODE]'
-MERGE_MODE = '[MERGE_MODE]'
-partitioning_dict = '[partitioning_dict]'
+DELETE_MODE = '{{DELETE_MODE}}'
+UPDATE_MODE= '{{UPDATE_MODE}}'
+MERGE_MODE = '{{MERGE_MODE}}'
+partitioning_dict = {{partitioning_dict}}
 
 # Creating DataFrames
 def schema_to_table(schema, file_path, table_name, partitioning=''):
