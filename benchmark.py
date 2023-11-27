@@ -1,6 +1,8 @@
 import sys
+import uuid
 import ConfigurationLoader
 import DataGeneration
+import TemplateManipulator
 
 if __name__ == '__main__':
     #Load configuration file
@@ -13,9 +15,11 @@ if __name__ == '__main__':
     data_generator = DataGeneration(tpch_scale_factor)
     data_generator.generate_data(tpch_gen_path)
 
-
     #Create dummy database
-    
+    database_name = f'benchmarking_{str(uuid.uuid4())}'
+    hive_temp_manipulator = TemplateManipulator()
+
+
     #Create Hive and Iceberg tables
     #Insert generated data into tables
     #Run queries and collect metrics
