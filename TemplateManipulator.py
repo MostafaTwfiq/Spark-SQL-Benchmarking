@@ -71,6 +71,19 @@ class HiveManipulator(TemplateManipulator):
             # TODO: Log the exception here
             print(f"An error occurred: {e}")
             return None
+        
+    def create_database_template(self, output_folder):
+        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'HiveDataBaseCreation.py')
+        output_file_path = os.path.join(output_folder, f'HiveDataBaseCreation_{str(uuid.uuid4())}.py')
+
+        try:
+            self.replace_words_in_file(input_file_path, output_file_path, {})
+            return output_file_path
+        except Exception as e:
+            # TODO: Log the exception here
+            print(f"An error occurred: {e}")
+            return None
+
 
 
 
@@ -134,7 +147,19 @@ class IcebergManipulator(TemplateManipulator):
         except Exception as e:
             # TODO: Log the exception here
             print(f"An error occurred: {e}")
-            return None      
+            return None  
+
+    def create_database_template(self, output_folder):
+        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'IcebergDataBaseCreation.py')
+        output_file_path = os.path.join(output_folder, f'IcebergDataBaseCreation_{str(uuid.uuid4())}.py')
+
+        try:
+            self.replace_words_in_file(input_file_path, output_file_path, {})
+            return output_file_path
+        except Exception as e:
+            # TODO: Log the exception here
+            print(f"An error occurred: {e}")
+            return None    
     
 
 # from ConfigurationLoader import ConfigurationLoader;
