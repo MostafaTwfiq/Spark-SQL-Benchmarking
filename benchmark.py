@@ -91,7 +91,7 @@ if __name__ == '__main__':
         dql_benchmark_queries = read_benchmark_queries('dql_benchmark_queries.sql')
         hive_durations = []
         iceberg_durations = []
-        rest = SparkRestAPI('localhost', '4040')
+        rest = SparkRestAPI(spark_connection['ip'], spark_connection['port'])
         for query in dql_benchmark_queries:
             # Creating Output Scripts
             hive_query_temp_path = hive_temp_manipulator.set_query(query)
@@ -101,12 +101,11 @@ if __name__ == '__main__':
             hive_app_id = sparkSubmitExecutor.submit_pyspark(hive_query_temp_path, hive_connection_args)
             iceberg_app_id = sparkSubmitExecutor.submit_pyspark(iceberg_query_temp_path, iceberg_connection_args)
         
-            # Fetch duration of sql
-
-
-        # Collect metrics
-        
+            # TODO: Fetch duration of sql
+            # hive_durations.append(rest.get_sql_duration())
+            # iceberg_durations.append(rest.get_sql_duration())        
         
         # Plot metrics
+
         
         
