@@ -1,7 +1,9 @@
 import subprocess
+import re
 
 class SparkSubmitExecutor():
     def __init__(self, yarn_ip, yarn_port, config_file_path):
+        self.TRACKING_URL_REGEX = r'tracking URL: https://.*?/(application_\d+_\d+)/'
         self.yarn_ip = yarn_ip
         self.yarn_port = yarn_port
         self.config_file_path = config_file_path
@@ -23,7 +25,9 @@ class SparkSubmitExecutor():
         # TODO: Log Here
         if result.returncode == 0:
             print(f"{file_path} Succeeded.")
-            application_id = result.stdout # extract application id from stdout
+            pattern = re.compile(self.TRACKING_URL_REGEX)
+            match = pattern.search(result.stdout)
+            application_id = match.group(1)
             return application_id
         else:
             print(f"{file_path} Failed. Output:\n{result.stdout}")
