@@ -22,18 +22,22 @@ def create_curr_run_folders():
     os.makedirs(logs_path)
     os.makedirs(tmp_path)
 
-def read_benchmark_queries():
+def read_benchmark_queries(sql_file_path):
     import re
-    with open('benchmark_queries.sql', 'r') as file:
+    with open(sql_file_path, 'r') as file:
         data = file.read()
     # Separate queries by semicolon, keeping the semicolon
     queries = re.split(r';\s*', data)
+    
     # Remove leading and trailing whitespace from each query
     queries = [query.strip() for query in queries]
+    
     # Remove empty queries
     queries = [query for query in queries if query]
+    
     # Remove unnecessary whitespace from each query
     queries = [' '.join(query.split()) + ";" for query in queries]
+    
     return queries
 
 if __name__ == '__main__':
@@ -81,7 +85,15 @@ if __name__ == '__main__':
         sparkSubmitExecutor.submit_pyspark(iceberg_insertion_temp_path, iceberg_connection_args)
         
         # Loop and run queries
-        benchmark_queries = read_benchmark_queries()
+        dql_benchmark_queries = read_benchmark_queries('dql_benchmark_queries.sql')
+        for query in dql_benchmark_queries:
+            # Creating Output Scripts
+            hive_query_temp_path = hive_temp_manipulator.set_query(query, tmp_path)
+            iceberg_query_temp_path = iceberg_temp_manipulator.set_query(query, tmp_path)
+            
+            # Submit Output Scripts to spark-submit
+            hive_app_id = sparkSubmitExecutor.submit_pyspark(hive_query_temp_path, hive_connection_args)
+            iceberg_app_id = sparkSubmitExecutor.submit_pyspark(iceberg_query_temp_path, iceberg_connection_args)
         
         # Collect metrics
         

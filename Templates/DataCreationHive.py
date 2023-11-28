@@ -36,7 +36,7 @@ def schema_to_table(schema, file_path, table_name, partitioning=''):
     .saveAsTable(f"{hive_database}.{table_name}")
 
 for table in schemas:
-    table_name = table[0] + "_hive"
+    table_name = table[0]
     file_path = os.path.join(GENERATE_TABLES_FOLDER, table[1])
     schema = table[2]
     if table_name in PARTITIONING_DICT.keys():    
