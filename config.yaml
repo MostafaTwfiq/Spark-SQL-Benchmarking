@@ -3,6 +3,9 @@ connections:
   spark:
     ip: localhost
     port: 4040
+  yarn:
+    ip: localhost
+    port: 4444
   hive:
     ip: localhost
     port: 9090
