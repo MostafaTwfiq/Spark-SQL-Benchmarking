@@ -17,9 +17,7 @@ class TemplateManipulator:
         pass
 
     def replace_words_in_file(self, input_file, output_file, modifications):
-    def replace_words_in_file(self, input_file, output_file, modifications):
         # Read the content of the file
-        with open(input_file, 'r') as file:
         with open(input_file, 'r') as file:
             template_content = file.read()
 
@@ -27,7 +25,6 @@ class TemplateManipulator:
         modified_content = template.render(modifications)
 
         # Write the modified content back to the file
-        with open(output_file, 'w') as file:
         with open(output_file, 'w') as file:
             file.write(modified_content)
         
