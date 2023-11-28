@@ -1,3 +1,4 @@
+--Pricing Summary Report
 SELECT
     l_returnflag,
     l_linestatus,
@@ -19,7 +20,7 @@ GROUP BY
 ORDER BY
     l_returnflag,
     l_linestatus;
-
+--Shipping Priority
 SELECT
     l_orderkey,
     SUM(l_extendedprice * (1 - l_discount)) AS revenue,
@@ -43,6 +44,7 @@ ORDER BY
 LIMIT
     10;
 
+--Order Priority Checking
 SELECT
     o_orderpriority,
     COUNT(*) AS order_count
@@ -65,6 +67,7 @@ GROUP BY
 ORDER BY
     o_orderpriority;
 
+--Local Supplier Volume
 SELECT
     n_name,
     SUM(l_extendedprice * (1 - l_discount)) AS revenue
@@ -85,6 +88,7 @@ GROUP BY
 ORDER BY
     revenue DESC;
 
+--Forecasting Revenue Change
 SELECT
     SUM(l_extendedprice * l_discount) AS revenue
 FROM
@@ -96,6 +100,7 @@ WHERE
     AND 0.070001
     AND l_quantity < 24;
 
+--Volume Shipping
 SELECT
     supp_nation,
     cust_nation,
@@ -138,6 +143,7 @@ ORDER BY
     cust_nation,
     l_year;
 
+--National Market Share
 SELECT
     o_year,
     SUM(
@@ -172,6 +178,7 @@ GROUP BY
 ORDER BY
     o_year;
 
+--Returned Item Reporting
 SELECT
     c_custkey,
     c_name,
@@ -203,6 +210,7 @@ ORDER BY
 LIMIT
     20;
 
+--The Important Stock Identification
 SELECT
     ps_partkey,
     SUM(ps_supplycost * ps_availqty) AS value
@@ -230,6 +238,7 @@ ORDER BY
 LIMIT
     10;
 
+--The Shipping Modes and Order Priority
 SELECT
     l_shipmode,
     SUM(
@@ -260,6 +269,7 @@ GROUP BY
 ORDER BY
     l_shipmode;
 
+--Customer Distribution
 SELECT
     c_count,
     COUNT(*) AS custdist
@@ -286,6 +296,7 @@ ORDER BY
     custdist DESC,
     c_count DESC;
 
+--The Promotion Effect
 SELECT
     100.00 * SUM(
         CASE
@@ -300,6 +311,7 @@ WHERE
     l_shipdate >= TO_DATE('1995-09-01')
     AND l_shipdate < ADD_MONTHS(TO_DATE('1995-09-01'), 1);
 
+--The Parts/Supplier Relationship
 SELECT
     p_brand,
     p_type,
@@ -330,6 +342,7 @@ ORDER BY
     p_type,
     p_size;
 
+--The Large Volume Customer
 SELECT
     c_name,
     c_custkey,
@@ -364,6 +377,7 @@ ORDER BY
 LIMIT
     100;
 
+--The Discounted Revenue
 SELECT
     SUM(l_extendedprice * (1 - l_discount)) AS revenue
 FROM
@@ -419,6 +433,7 @@ WHERE
         AND l_shipinstruct = 'DELIVER IN PERSON'
     );
 
+--The Potential Part Promotion
 SELECT
     s_name,
     s_address

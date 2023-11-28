@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 
 class MetricsPlotter:
+    
+    def __init__(self, metrics_path):
+        self.path = metrics_path
 
     def plot_benchmark_results(self, queries, tables_metrics, metric_type, title):
         # Calculate dynamic group width
@@ -23,7 +26,7 @@ class MetricsPlotter:
         ax.legend()
 
         # Save the plot as a PNG file
-        plt.savefig(f'{title}.png')
+        plt.savefig(f'{self.path}/{title}.png')
 
 
 
