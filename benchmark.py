@@ -22,22 +22,35 @@ def create_curr_run_folders():
     os.makedirs(logs_path)
     os.makedirs(tmp_path)
 
+def read_benchmark_queries():
+    import re
+    with open('benchmark_queries.sql', 'r') as file:
+        data = file.read()
+    # Separate queries by semicolon, keeping the semicolon
+    queries = re.split(r';\s*', data)
+    # Remove leading and trailing whitespace from each query
+    queries = [query.strip() for query in queries]
+    # Remove empty queries
+    queries = [query for query in queries if query]
+    # Remove unnecessary whitespace from each query
+    queries = [' '.join(query.split()) + ";" for query in queries]
+    return queries
 
 if __name__ == '__main__':
-    #Create new folder for the current app run
+    # Create new folder for the current app run
     create_curr_run_folders()
 
-    #Load configuration file
+    # Load configuration file
     config_file_path = sys.argv[1]
     config_loader = ConfigurationLoader(config_file_path)
 
-    #Generate tpch data
+    # Generate tpch data
     tpch_gen_path = config_loader.get_tpch_generation_path()
     tpch_scale_factor = config_loader.get_tpch_db_scale_factor()
     data_generator = DataGeneration(tpch_scale_factor)
     data_generator.generate_data(tpch_gen_path)
 
-    #benchmarking
+    # Benchmarking
     spark_connection = config_loader.get_spark_connection()
     hdfs_connection = config_loader.get_hdfs_connection()
     hive_connection = config_loader.get_hive_connection()
@@ -51,7 +64,7 @@ if __name__ == '__main__':
     for i in range(config_loader.get_groups_size()):
         hive_props = config_loader.get_table_properties(i, 'hive')
         iceberg_props = config_loader.get_table_properties(i, 'iceberg')
-        #create dummy database (hive and iceberg)
+        # Create dummy database (hive and iceberg)
         database_name = f'benchmarking_{str(uuid.uuid4())}'
         hive_connection_args = [hive_connection['ip'], hive_connection['port'], database_name]
         iceberg_connection_args = [hdfs_connection['ip'], hdfs_connection['port'], database_name, iceberg_warehouse]
@@ -67,6 +80,12 @@ if __name__ == '__main__':
         sparkSubmitExecutor.submit_pyspark(hive_insertion_temp_path, hive_connection_args)
         sparkSubmitExecutor.submit_pyspark(iceberg_insertion_temp_path, iceberg_connection_args)
         
-        #loop and run queries
-        #collect metrics
-        #plot metrics
+        # Loop and run queries
+        benchmark_queries = read_benchmark_queries()
+        
+        # Collect metrics
+        
+        
+        # Plot metrics
+        
+        
