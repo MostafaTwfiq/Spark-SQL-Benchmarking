@@ -30,6 +30,9 @@ class ConfigurationLoader:
     def get_spark_connection(self):
         return self.connections['spark']
     
+    def get_yarn_connection(self):
+        return self.connections['yarn']
+    
     def get_hive_connection(self):
         return self.connections['hive']
     
