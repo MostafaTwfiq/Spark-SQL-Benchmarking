@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import ConfigurationLoader
 import DataGeneration
+import SparkRestAPI
 from TemplateManipulator import HiveManipulator, IcebergManipulator
 import sparkSubmitExecutor
 
@@ -79,22 +80,30 @@ if __name__ == '__main__':
         sparkSubmitExecutor.submit_pyspark(iceberg_db_temp_path, iceberg_connection_args)
 
         #insert data into tables (hive and iceberg)
-        hive_insertion_temp_path = hive_temp_manipulator.set_creation_template_properties(config_loader.get_table_properties(i, 'hive'), tpch_gen_path)
-        iceberg_insertion_temp_path = iceberg_temp_manipulator.set_creation_template_properties(config_loader.get_table_properties(i, 'iceberg'), tpch_gen_path)
+        hive_insertion_temp_path = hive_temp_manipulator. \
+            set_creation_template_properties(config_loader.get_table_properties(i, 'hive'), tpch_gen_path)
+        iceberg_insertion_temp_path = iceberg_temp_manipulator. \
+            set_creation_template_properties(config_loader.get_table_properties(i, 'iceberg'), tpch_gen_path)
         sparkSubmitExecutor.submit_pyspark(hive_insertion_temp_path, hive_connection_args)
         sparkSubmitExecutor.submit_pyspark(iceberg_insertion_temp_path, iceberg_connection_args)
         
         # Loop and run queries
         dql_benchmark_queries = read_benchmark_queries('dql_benchmark_queries.sql')
+        hive_durations = []
+        iceberg_durations = []
+        rest = SparkRestAPI('localhost', '4040')
         for query in dql_benchmark_queries:
             # Creating Output Scripts
-            hive_query_temp_path = hive_temp_manipulator.set_query(query, tmp_path)
-            iceberg_query_temp_path = iceberg_temp_manipulator.set_query(query, tmp_path)
+            hive_query_temp_path = hive_temp_manipulator.set_query(query)
+            iceberg_query_temp_path = iceberg_temp_manipulator.set_query(query)
             
             # Submit Output Scripts to spark-submit
             hive_app_id = sparkSubmitExecutor.submit_pyspark(hive_query_temp_path, hive_connection_args)
             iceberg_app_id = sparkSubmitExecutor.submit_pyspark(iceberg_query_temp_path, iceberg_connection_args)
         
+            # Fetch duration of sql
+
+
         # Collect metrics
         
         
