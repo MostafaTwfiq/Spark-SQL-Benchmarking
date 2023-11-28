@@ -55,4 +55,6 @@ if __name__ == "__main__":
     print(conf_loader.get_iceberg_warehouse())
     for i in range(len):
         hive_props = conf_loader.get_table_properties(i, 'hive')
+        print(hive_props)
         iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
+        print(iceberg_props)

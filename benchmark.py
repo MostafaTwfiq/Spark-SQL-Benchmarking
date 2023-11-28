@@ -45,8 +45,8 @@ if __name__ == '__main__':
     yarn_connection = config_loader.get_yarn_connection()
     spark_submit_executor = sparkSubmitExecutor(yarn_connection['ip'], yarn_connection['port'], spark_config_file)
 
-    hive_temp_manipulator = HiveManipulator()
-    iceberg_temp_manipulator = IcebergManipulator()
+    hive_temp_manipulator = HiveManipulator(tmp_path)
+    iceberg_temp_manipulator = IcebergManipulator(tmp_path)
 
     for i in range(config_loader.get_groups_size()):
         hive_props = config_loader.get_table_properties(i, 'hive')
@@ -56,14 +56,14 @@ if __name__ == '__main__':
         hive_connection_args = [hive_connection['ip'], hive_connection['port'], database_name]
         iceberg_connection_args = [hdfs_connection['ip'], hdfs_connection['port'], database_name, iceberg_warehouse]
 
-        hive_db_temp_path = hive_temp_manipulator.create_database_template(tmp_path)
-        iceberg_db_temp_path = iceberg_temp_manipulator.create_database_template(tmp_path)
+        hive_db_temp_path = hive_temp_manipulator.create_database_template()
+        iceberg_db_temp_path = iceberg_temp_manipulator.create_database_template()
         sparkSubmitExecutor.submit_pyspark(hive_db_temp_path, hive_connection_args)
         sparkSubmitExecutor.submit_pyspark(iceberg_db_temp_path, iceberg_connection_args)
 
         #insert data into tables (hive and iceberg)
-        hive_insertion_temp_path = hive_temp_manipulator.set_creation_template_properties(config_loader.get_table_properties(i, 'hive'), tpch_gen_path, tmp_path)
-        iceberg_insertion_temp_path = iceberg_temp_manipulator.set_creation_template_properties(config_loader.get_table_properties(i, 'iceberg'), tpch_gen_path, tmp_path)
+        hive_insertion_temp_path = hive_temp_manipulator.set_creation_template_properties(config_loader.get_table_properties(i, 'hive'), tpch_gen_path)
+        iceberg_insertion_temp_path = iceberg_temp_manipulator.set_creation_template_properties(config_loader.get_table_properties(i, 'iceberg'), tpch_gen_path)
         sparkSubmitExecutor.submit_pyspark(hive_insertion_temp_path, hive_connection_args)
         sparkSubmitExecutor.submit_pyspark(iceberg_insertion_temp_path, iceberg_connection_args)
         
