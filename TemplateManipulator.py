@@ -50,7 +50,7 @@ class HiveManipulator(TemplateManipulator):
         print("HELLOOOO " + generated_tables_folder)
         
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'DataCreationHive.py')
-        output_file_path = os.path.join(self.output_folder, f'DataCreationHive_{get_random_string(8)}.py')
+        output_file_path = os.path.join(self.output_folder, f'DataCreationHive_{get_random_string(3)}.py')
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {self.PARTITION_PLACEHOLDER: partitioning_dict,
                                     self.GENERATE_TABLES_FOLDER: generated_tables_folder})
@@ -71,7 +71,7 @@ class HiveManipulator(TemplateManipulator):
     
     def set_query(self, query):
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'QueryHive.py')
-        output_file_path = os.path.join(self.output_folder, f'QueryHive_{get_random_string(8)}.py')
+        output_file_path = os.path.join(self.output_folder, f'QueryHive_{get_random_string(3)}.py')
 
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {self.QUERY_PLACEHOLDER: query})
@@ -84,7 +84,7 @@ class HiveManipulator(TemplateManipulator):
     def create_database_template(self):
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'HiveDataBaseCreation.py')
         print(self.output_folder)
-        output_file_path = os.path.join(self.output_folder, f'HiveDataBaseCreation_{get_random_string(8)}.py')
+        output_file_path = os.path.join(self.output_folder, f'HiveDataBaseCreation_{get_random_string(3)}.py')
 
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {})
@@ -119,7 +119,7 @@ class IcebergManipulator(TemplateManipulator):
                          self.GENERATE_TABLES_FOLDER: generated_tables_folder}
         
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'DataCreationIceberg.py')
-        output_file_path = os.path.join(self.output_folder, f'DataCreationIceberg_{get_random_string(8)}.py')
+        output_file_path = os.path.join(self.output_folder, f'DataCreationIceberg_{get_random_string(3)}.py')
         try:
             self.replace_words_in_file(input_file_path, output_file_path, modifications)
             return output_file_path
@@ -149,7 +149,7 @@ class IcebergManipulator(TemplateManipulator):
 
     def set_query(self, query):
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'QueryIceberg.py')
-        output_file_path = os.path.join(self.output_folder, f'QueryIceberg_{get_random_string(8)}.py')
+        output_file_path = os.path.join(self.output_folder, f'QueryIceberg_{get_random_string(3)}.py')
 
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {self.QUERY_PLACEHOLDER: query})
@@ -161,7 +161,7 @@ class IcebergManipulator(TemplateManipulator):
 
     def create_database_template(self):
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'IcebergDataBaseCreation.py')
-        output_file_path = os.path.join(self.output_folder, f'IcebergDataBaseCreation_{get_random_string(8)}.py')
+        output_file_path = os.path.join(self.output_folder, f'IcebergDataBaseCreation_{get_random_string(3)}.py')
 
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {})
@@ -175,7 +175,7 @@ class IcebergManipulator(TemplateManipulator):
 from ConfigurationLoader import ConfigurationLoader;
 
 if __name__ == "__main__":
-    print(get_random_string(8))
+    print(get_random_string(3))
 
     # conf_loader = ConfigurationLoader(conf_path='./config.yaml')
     
