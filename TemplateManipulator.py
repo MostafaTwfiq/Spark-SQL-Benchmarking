@@ -75,6 +75,7 @@ class HiveManipulator(TemplateManipulator):
         
     def create_database_template(self):
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'HiveDataBaseCreation.py')
+        print(self.output_folder)
         output_file_path = os.path.join(self.output_folder, f'HiveDataBaseCreation_{str(uuid.uuid4())}.py')
 
         try:
