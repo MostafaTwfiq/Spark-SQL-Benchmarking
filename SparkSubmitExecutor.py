@@ -21,14 +21,17 @@ class SparkSubmitExecutor():
         strings_to_concate = [self.spark_submit_command, file_path] + args
         command = " ".join(strings_to_concate)
 
-        result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+      #  result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, capture_output=True)
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
         # TODO: Log Here
-        if result.returncode == 0:
-            print(f"{file_path} Succeeded.")
-            pattern = re.compile(self.TRACKING_URL_REGEX)
-            match = pattern.search(result.stdout)
-            application_id = match.group(1)
-            return application_id
-        else:
-            print(f"{file_path} Failed. Output:\n{result.stdout}")
-            return None
+       # if result.returncode == 0:
+        #    print(f"{file_path} Succeeded.")
+         #   print("Keys:", result.keys())            
+          #  pattern = result.compile(self.TRACKING_URL_REGEX)
+           # match = pattern.search(result.stdout)
+            #application_id = match.group(1)
+            #return application_id
+        #else:
+         #   print(f"{file_path} Failed. Output:\n{result.stdout}")
+          #  return None
