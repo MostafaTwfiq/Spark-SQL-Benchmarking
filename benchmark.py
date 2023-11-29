@@ -9,6 +9,7 @@ from SparkRestAPI import SparkRestAPI
 from MetricsPlotter import MetricsPlotter
 from SparkSubmitExecutor import SparkSubmitExecutor
 import re 
+from Utils import get_random_string
 
 root_path = None
 logs_path = None
@@ -78,8 +79,8 @@ if __name__ == '__main__':
         hive_props = config_loader.get_table_properties(i, 'hive')
         iceberg_props = config_loader.get_table_properties(i, 'iceberg')
         # Create dummy database (hive and iceberg)
-        hive_database_name = f'benchmarking_{str(uuid.uuid1()).replace("-", "_")}'        
-        iceberg_database_name = f'benchmarking_{str(uuid.uuid1()).replace("-", "_")}'
+        hive_database_name = f'benchmarking_{get_random_string(8)}'        
+        iceberg_database_name = f'benchmarking_{get_random_string(8)}'
         print(hive_database_name)
         print(iceberg_database_name)
         
