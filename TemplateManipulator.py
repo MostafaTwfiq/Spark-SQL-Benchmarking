@@ -166,22 +166,4 @@ class IcebergManipulator(TemplateManipulator):
         except Exception as e:
             # TODO: Log the exception here
             print(f"An error occurred: {e}")
-            return None    
-    
-
-from ConfigurationLoader import ConfigurationLoader;
-
-if __name__ == "__main__":
-    # conf_loader = ConfigurationLoader(conf_path='./config.yaml')
-    
-    # len = conf_loader.get_groups_size()
-    # for i in range(len):
-    #     hive_props = conf_loader.get_table_properties(i, 'hive')
-    #     hive_loader = HiveManipulator('./temp')
-    #     hive_loader.set_creation_template_properties(hive_props, 'HI')
-    #     hive_loader.set_query("select * from nation;")
-
-    #     iceberg_props = conf_loader.get_table_properties(i, 'iceberg')
-    #     iceberg_loader = IcebergManipulator('./temp')
-    #     iceberg_loader.set_creation_template_properties(iceberg_props, 'HI')
-    #     iceberg_loader.set_query("select * from nation;")
+            return None
