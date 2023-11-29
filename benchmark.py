@@ -79,8 +79,8 @@ if __name__ == '__main__':
         hive_props = config_loader.get_table_properties(i, 'hive')
         iceberg_props = config_loader.get_table_properties(i, 'iceberg')
         # Create dummy database (hive and iceberg)
-        hive_database_name = f'benchmarking_{get_random_string(8)}'        
-        iceberg_database_name = f'benchmarking_{get_random_string(8)}'
+        hive_database_name = f'benchmarking_{get_random_string(3)}'        
+        iceberg_database_name = f'benchmarking_{get_random_string(3)}'
         print(hive_database_name)
         print(iceberg_database_name)
         
