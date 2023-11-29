@@ -78,8 +78,8 @@ if __name__ == '__main__':
         hive_props = config_loader.get_table_properties(i, 'hive')
         iceberg_props = config_loader.get_table_properties(i, 'iceberg')
         # Create dummy database (hive and iceberg)
-        hive_database_name = f'benchmarking_{str(uuid.uuid4()).replace("-", "_")}'        
-        iceberg_database_name = f'benchmarking_{str(uuid.uuid4()).replace("-", "_")}'
+        hive_database_name = f'benchmarking_{str(uuid.uuid1()).replace("-", "_")}'        
+        iceberg_database_name = f'benchmarking_{str(uuid.uuid1()).replace("-", "_")}'
         print(hive_database_name)
         print(iceberg_database_name)
         
