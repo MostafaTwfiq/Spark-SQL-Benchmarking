@@ -2,6 +2,7 @@ import os
 import json
 from jinja2 import Template
 import uuid
+import subprocess
 
 class TemplateManipulator:
 
@@ -9,6 +10,12 @@ class TemplateManipulator:
         self.TEMPLATES_FOLDER = './Templates'
         self.QUERY_PLACEHOLDER = 'QUERY'
         self.output_folder = output_folder
+        self.__add_shemas_to_temp_folder()
+
+    def __add_shemas_to_temp_folder(self):
+        command = f'cp {self.TEMPLATES_FOLDER}/schemas.py {self.output_folder}'
+        subprocess.run(command, shell=True, stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE, text=True)
         
     def set_creation_template_properties(self, table_properties, generated_tables_folder):
         pass
