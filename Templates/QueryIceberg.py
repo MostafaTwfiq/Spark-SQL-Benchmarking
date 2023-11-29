@@ -14,7 +14,7 @@ spark = SparkSession.builder \
     .config("spark.sql.catalog.iceberg", "org.apache.iceberg.spark.SparkCatalog") \
     .config("spark.sql.catalog.iceberg.type", "hadoop") \
     .config("spark.sql.catalog.iceberg.warehouse", 
-            f"hadoop://{iceberg_host}:{iceberg_port}/{iceberg_warehouse}") \
+            f"hadoop://{iceberg_host}:{iceberg_port}/{iceberg_warehouse}/{iceberg_database}.db") \
     .getOrCreate()
 
 
