@@ -59,11 +59,12 @@ if __name__ == '__main__':
     print("Configuration file loaded successfully.") # Logging
 
     # Generate tpch data
-    tpch_dbgen_path = sys.argv[2]
+    tpch_dbgen_path = './tpch-dbgen'#sys.argv[2]
     tpch_gen_path = config_loader.get_tpch_generation_path()
     tpch_scale_factor = config_loader.get_tpch_db_scale_factor()
     data_generator = DataGeneration(tpch_dbgen_path, tpch_scale_factor)
     data_generator.generate_data(tpch_gen_path)
+    print("Generated benchmark data successfully.")
 
     # Benchmarking
     spark_connection = config_loader.get_spark_connection()
