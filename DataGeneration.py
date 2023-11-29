@@ -1,7 +1,8 @@
 import subprocess
 
 class DataGeneration:
-    def __init__(self, scale_factor=5):
+    def __init__(self, dbgen_path, scale_factor=5):
+        self.dbgen_path = dbgen_path
         self.scale_factor = scale_factor
 
 
@@ -22,10 +23,10 @@ class DataGeneration:
         make_dir_cmd = f'mkdir {data_path}'
         self.__execute_command(make_dir_cmd, 'Data Directory Creation')
 
-        copy_cmd = f'cp ./tpch-dbgen/dbgen {data_path}'
+        copy_cmd = f'cp {self.dbgen_path}/dbgen {data_path}'
         self.__execute_command(copy_cmd, 'dbgen executable file Copy')
 
-        copy_cmd = f'cp ./tpch-dbgen/dists.dss {data_path}'
+        copy_cmd = f'cp {self.dbgen_path}/dists.dss {data_path}'
         self.__execute_command(copy_cmd, 'dists.dss file Copy')
 
 
