@@ -21,7 +21,7 @@ class SparkSubmitExecutor():
         strings_to_concate = [self.spark_submit_command, file_path] + args
         command = " ".join(strings_to_concate)
 
-        result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, capture_output=True)
+        result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # TODO: Log Here
         if result.returncode == 0:
             print(f"{file_path} Succeeded.")
