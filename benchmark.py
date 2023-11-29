@@ -72,7 +72,6 @@ if __name__ == '__main__':
     spark_submit_executor = SparkSubmitExecutor(yarn_connection['ip'], yarn_connection['port'], spark_config_file)
 
     hive_temp_manipulator = HiveManipulator(tmp_path)
-    print(tmp_path)
     iceberg_temp_manipulator = IcebergManipulator(tmp_path)
 
     for i in range(config_loader.get_groups_size()):
