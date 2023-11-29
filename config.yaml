@@ -17,7 +17,7 @@ connections:
 #tpch properties
 tpch:
   generation_path: './data'
-  database_scale_factor: 3
+  database_scale_factor: 1
 # List of Analysis groups
 groups:
   # Analysis group
