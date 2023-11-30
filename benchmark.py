@@ -171,6 +171,15 @@ if __name__ == '__main__':
                                    metric_type='duration', title='Hive vs Iceberg')
         print("\tDone plotting metrics.")
     
+
+    hive_db_deletion_temp_path = hive_temp_manipulator.create_database_deletion_template()
+    print(f"\tDone creating hive database deletion template: {hive_db_deletion_temp_path}") # Logging
+    iceberg_db_deletion_temp_path = iceberg_temp_manipulator.create_database_deletion_template()
+    print(f"\tDone creating iceberg database deletion template: {iceberg_db_deletion_temp_path}") # Logging
+    spark_submit_executor.submit_pyspark(hive_db_deletion_temp_path, hive_connection_args)
+    print(f"\tDone deleting hive database: {hive_db_deletion_temp_path}") # Logging
+    spark_submit_executor.submit_pyspark(iceberg_db_deletion_temp_path, iceberg_connection_args)
+    print(f"\tDone deleting iceberg database: {iceberg_db_deletion_temp_path}") # Logging
     
     os.rmdir(tmp_path)
     print(f"{tmp_path} deleted successfully.") # Logging

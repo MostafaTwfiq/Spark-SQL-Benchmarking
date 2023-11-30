@@ -90,6 +90,18 @@ class HiveManipulator(TemplateManipulator):
             # TODO: Log the exception here
             print(f"An error occurred: {e}")
             return None
+    
+    def create_database_deletion_template(self):
+        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'DataDeletionHive.py')
+        output_file_path = os.path.join(self.output_folder, f'DataDeletionHive_{str(uuid.uuid4()).replace("-", "_")}.py')
+
+        try:
+            self.replace_words_in_file(input_file_path, output_file_path, {})
+            return output_file_path
+        except Exception as e:
+            # TODO: Log the exception here
+            print(f"An error occurred: {e}")
+            return None
 
 
 
@@ -159,6 +171,18 @@ class IcebergManipulator(TemplateManipulator):
     def create_database_template(self):
         input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'IcebergDataBaseCreation.py')
         output_file_path = os.path.join(self.output_folder, f'IcebergDataBaseCreation_{str(uuid.uuid4()).replace("-", "_")}.py')
+
+        try:
+            self.replace_words_in_file(input_file_path, output_file_path, {})
+            return output_file_path
+        except Exception as e:
+            # TODO: Log the exception here
+            print(f"An error occurred: {e}")
+            return None
+    
+    def create_database_deletion_template(self):
+        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'DataDeletionIceberg.py')
+        output_file_path = os.path.join(self.output_folder, f'DataDeletionIceberg_{str(uuid.uuid4()).replace("-", "_")}.py')
 
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {})
