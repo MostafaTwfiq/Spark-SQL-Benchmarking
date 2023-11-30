@@ -12,6 +12,7 @@ connections:
   hdfs:
     ip: localhost
     port: 8080
+    user_folder_path: user/iceberg
   iceberg:
     iceberg_warehouse: warehouse/tablespace/external/hive
 #tpch properties

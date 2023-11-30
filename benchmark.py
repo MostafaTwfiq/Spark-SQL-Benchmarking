@@ -9,6 +9,7 @@ from SparkRestAPI import SparkRestAPI
 from MetricsPlotter import MetricsPlotter
 from SparkSubmitExecutor import SparkSubmitExecutor
 import re 
+import subprocess
 
 root_path = None
 logs_path = None
@@ -48,6 +49,25 @@ def read_benchmark_queries(sql_file_path):
 
     return queries_names, queries
 
+def copy_banchmark_data_to_hdfs(hdfs_ip, hdfs_port, hdfs_user_path, tpch_gen_path):
+    benchmarking_tmp_path = f'benchmarking_tmp_{str(uuid.uuid4()).replace("-", "_")}'
+
+    create_hdfs_folder_command = f'hadoop fs -mkdir hdfs://{hdfs_ip}:{hdfs_port}/{hdfs_user_path}/{benchmarking_tmp_path}'
+    result = subprocess.run(create_hdfs_folder_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"{benchmarking_tmp_path} creation Succeeded.") if result.returncode == 0 else print(f"{benchmarking_tmp_path} creation Failed. Output:\n{result.stdout}")    
+
+    copy_tpch_data_to_hdfs_command = f'hdfs dfs -copyFromLocal {tpch_gen_path}/* hdfs://{hdfs_ip}:{hdfs_port}/{hdfs_user_path}/{benchmarking_tmp_path}'
+    result = subprocess.run(copy_tpch_data_to_hdfs_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"Copying tpch data to {benchmarking_tmp_path} Succeeded.") if result.returncode == 0 else print(f"Copying tpch data to {benchmarking_tmp_path} Failed. Output:\n{result.stdout}")     
+
+    return benchmarking_tmp_path
+
+def delete_hdfs_folder(hdfs_ip, hdfs_port, hdfs_user_path, folder_path):
+    remove_hdfs_folder_command = f'hdfs dfs -rm -r hdfs://{hdfs_ip}:{hdfs_port}/{hdfs_user_path}/{folder_path}'
+    result = subprocess.run(remove_hdfs_folder_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"{folder_path} folder deletion Succeeded.") if result.returncode == 0 else print(f"{folder_path} folder deletion Failed. Output:\n{result.stdout}")    
+
+
 if __name__ == '__main__':
     # Create new folder for the current app run
     create_curr_run_folders()
@@ -65,6 +85,11 @@ if __name__ == '__main__':
     data_generator = DataGeneration(tpch_dbgen_path, tpch_scale_factor)
     data_generator.generate_data(tpch_gen_path)
     print("Generated benchmark data successfully.")
+
+    # Copy generated data to hdfs
+    hdfs_conn = config_loader.get_hdfs_connection()
+    hdfs_benchmarking_tmp_path = copy_banchmark_data_to_hdfs(hdfs_conn['ip'], hdfs_conn['port'], hdfs_conn['user_folder_path'], tpch_gen_path)
+    print("Benchmark data copied to hdfs successfully.")
 
     # Benchmarking
     spark_connection = config_loader.get_spark_connection()
@@ -85,8 +110,8 @@ if __name__ == '__main__':
         iceberg_props = config_loader.get_table_properties(i, 'iceberg')
 
         # Create dummy database (hive and iceberg)
-        hive_database_name = f'benchmarking_{str(uuid.uuid4())}'   
-        iceberg_database_name = f'benchmarking_{str(uuid.uuid4())}'
+        hive_database_name = f'benchmarking_{str(uuid.uuid4()).replace("-", "_")}'   
+        iceberg_database_name = f'benchmarking_{str(uuid.uuid4()).replace("-", "_")}'
         
         hive_connection_args = [hive_connection['ip'], str(hive_connection['port']), hive_database_name]
         iceberg_connection_args = [hdfs_connection['ip'], str(hdfs_connection['port']), iceberg_database_name, iceberg_warehouse]
@@ -145,3 +170,6 @@ if __name__ == '__main__':
                                    tables_metrics={'hive': hive_durations, 'iceberg': iceberg_durations},
                                    metric_type='duration', title='Hive vs Iceberg')
         print("\tDone plotting metrics.")
+    
+    delete_hdfs_folder(hdfs_benchmarking_tmp_path)
+    print(f'{hdfs_benchmarking_tmp_path} hdfs folder deleted successfully.') # Logging
