@@ -165,11 +165,14 @@ if __name__ == '__main__':
             print("\t\tQuery duration on iceberg fetched successfully.") # Logging
                     
         # Plot metrics
-        plotter = MetricsPlotter()
+        plotter = MetricsPlotter(metric_path)
         plotter.plot_benchmark_results(queries=queries_names, 
                                    tables_metrics={'hive': hive_durations, 'iceberg': iceberg_durations},
                                    metric_type='duration', title='Hive vs Iceberg')
         print("\tDone plotting metrics.")
     
-    delete_hdfs_folder(hdfs_tpch_data_path)
+    
+    os.rmdir(tmp_path)
+    print(f"{tmp_path} deleted successfully.") # Logging
+    delete_hdfs_folder(hdfs_conn['ip'], hdfs_conn['port'], hdfs_conn['user_folder_path'], hdfs_tpch_data_path)
     print(f'{hdfs_tpch_data_path} hdfs folder deleted successfully.') # Logging
