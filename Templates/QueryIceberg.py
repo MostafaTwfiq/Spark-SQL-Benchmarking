@@ -21,7 +21,7 @@ spark = SparkSession.builder \
 # Set the Iceberg catalog as the current catalog
 spark.sql(f"USE {iceberg_database}")
 
-QUERY = '{{QUERY}}'
+QUERY = '''{{QUERY}}'''
 
 spark.sql(QUERY)
 
