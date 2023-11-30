@@ -25,7 +25,7 @@ class SparkSubmitExecutor():
         # TODO: Log Here
         if result.returncode == 0:
             print(f"{file_path} Succeeded.")
-            pattern = result.compile(self.TRACKING_URL_REGEX)
+            pattern = re.compile(self.TRACKING_URL_REGEX)
             match = pattern.search(str(result.stdout) + str(result.stderr))
             application_id = match.group(1)
             return application_id
