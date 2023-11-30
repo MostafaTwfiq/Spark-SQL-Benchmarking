@@ -178,9 +178,9 @@ if __name__ == '__main__':
     iceberg_db_deletion_temp_path = iceberg_temp_manipulator.create_database_deletion_template()
     print(f"\tDone creating iceberg database deletion template: {iceberg_db_deletion_temp_path}") # Logging
     spark_submit_executor.submit_pyspark(hive_db_deletion_temp_path, hive_connection_args)
-    print(f"\tDone deleting hive database: {hive_db_deletion_temp_path}") # Logging
+    print(f"\tDone deleting hive database: {hive_database_name}") # Logging
     spark_submit_executor.submit_pyspark(iceberg_db_deletion_temp_path, iceberg_connection_args)
-    print(f"\tDone deleting iceberg database: {iceberg_db_deletion_temp_path}") # Logging
+    print(f"\tDone deleting iceberg database: {iceberg_database_name}") # Logging
     
     try:
         shutil.rmtree(tmp_path)
