@@ -16,7 +16,7 @@ spark = SparkSession.builder.appName("QueryHive") \
 # Set the default database
 spark.sql(f"USE {hive_database}")
 
-QUERY = '{{QUERY}}'
+QUERY = '''{{QUERY}}'''
 
 spark.sql(QUERY)
 
