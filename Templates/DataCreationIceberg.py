@@ -34,12 +34,12 @@ def schema_to_table(schema, file_path, table_name, partitioning=''):
     # global delete_mode, update_mode, merge_mode, PARTITIONING
     # df = spark.createDataFrame([], schema=schema)
     df = spark.read.csv(file_path, sep='|', schema=schema)
-    df = df.write.format('iceberg')
+    writer = df.write.format('iceberg')
     
     if partitioning != '':
-        df = df.partitionBy(partitioning)
+        writer = df.partitionBy(partitioning)
     
-    df.mode("overwrite") \
+    writer.mode("overwrite") \
     .option("write.delete.mode", DELETE_MODE) \
     .option("write.update.mode", UPDATE_MODE) \
     .option("write.merge.mode", MERGE_MODE) \

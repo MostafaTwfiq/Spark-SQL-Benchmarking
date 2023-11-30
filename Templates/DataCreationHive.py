@@ -27,12 +27,12 @@ GENERATE_TABLES_FOLDER = '{{GENERATED_TABLES_FOLDER}}'
 def schema_to_table(schema, file_path, table_name, partitioning=''):
     # df = spark.createDataFrame([], schema=schema)
     df = spark.read.csv(file_path, sep='|', schema=schema)
-    df = df.write.format('parquet')
+    writer = df.write.format('parquet')
     
     if partitioning != '':
-        df = df.partitionBy(partitioning)
+        writer = df.partitionBy(partitioning)
     
-    df.mode("overwrite") \
+    writer.mode("overwrite") \
     .saveAsTable(f"{hive_database}.{table_name}")
 
 for table in schemas:
