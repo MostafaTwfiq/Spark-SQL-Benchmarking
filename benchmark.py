@@ -10,6 +10,7 @@ from MetricsPlotter import MetricsPlotter
 from SparkSubmitExecutor import SparkSubmitExecutor
 import re 
 import subprocess
+import shutil
 
 root_path = None
 logs_path = None
@@ -181,11 +182,15 @@ if __name__ == '__main__':
     iceberg_db_deletion_temp_path = iceberg_temp_manipulator.create_database_deletion_template()
     print(f"\tDone creating iceberg database deletion template: {iceberg_db_deletion_temp_path}") # Logging
     spark_submit_executor.submit_pyspark(hive_db_deletion_temp_path, hive_connection_args)
-    print(f"\tDone deleting hive database: {hive_db_deletion_temp_path}") # Logging
+    print(f"\tDone deleting hive database: {hive_database_name}") # Logging
     spark_submit_executor.submit_pyspark(iceberg_db_deletion_temp_path, iceberg_connection_args)
-    print(f"\tDone deleting iceberg database: {iceberg_db_deletion_temp_path}") # Logging
+    print(f"\tDone deleting iceberg database: {iceberg_database_name}") # Logging
     
-    os.rmdir(tmp_path)
+    try:
+        shutil.rmtree(tmp_path)
+        print(f"{tmp_path} deleted successfully.") # Logging
+    except OSError as e:
+        print(f"Error occurred while deleting {tmp_path}: {e}")
     print(f"{tmp_path} deleted successfully.") # Logging
     delete_hdfs_folder(hdfs_conn['ip'], hdfs_conn['port'], hdfs_conn['user_folder_path'], hdfs_tpch_data_path)
     print(f'{hdfs_tpch_data_path} hdfs folder deleted successfully.') # Logging
