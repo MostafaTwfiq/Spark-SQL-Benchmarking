@@ -138,9 +138,7 @@ if __name__ == '__main__':
         print(f"\tRecords successfully inserted in iceberg tables.") # Logging
         
         # Loop and run queries
-        hive_durations = []
-        iceberg_durations = []
-        rest = SparkRestAPI(spark_connection['ip'], spark_connection['port'])
+        app_ids = []
         queries_names, dql_benchmark_queries = read_benchmark_queries('benchmark_queries.sql')
         print("\tBenchmark queries loaded successfully.")
         for query_name, query in zip(queries_names, dql_benchmark_queries):
@@ -158,12 +156,18 @@ if __name__ == '__main__':
             iceberg_app_id = spark_submit_executor.submit_pyspark(iceberg_query_temp_path, iceberg_connection_args)
             print(f"\t\tCompleted running the query on iceberg.") # Logging
         
-            # Fetch Query Duration
-            hive_durations.append(rest.get_sql_duration(rest.get_application_all_sql_metrics(hive_app_id)))
+            app_ids.append((hive_app_id, iceberg_app_id))
+        
+        # Fetch Queries Duration
+        hive_durations = []
+        iceberg_durations = []
+        rest = SparkRestAPI(spark_connection['ip'], spark_connection['port'])
+        for (hive_app_id, iceberg_app_id) in app_ids:
+            rest.get_sql_duration(rest.get_application_all_sql_metrics(hive_app_id))
             print("\t\tQuery duration on hive fetched successfully.") # Logging
-            iceberg_durations.append(rest.get_sql_duration(rest.get_application_all_sql_metrics(iceberg_app_id)))
+            rest.get_sql_duration(rest.get_application_all_sql_metrics(iceberg_app_id))
             print("\t\tQuery duration on iceberg fetched successfully.") # Logging
-                    
+
         # Plot metrics
         plotter = MetricsPlotter(metric_path)
         plotter.plot_benchmark_results(queries=queries_names, 
