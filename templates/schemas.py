@@ -1,5 +1,16 @@
 from pyspark.sql.types import StructType, StructField, LongType, IntegerType, DoubleType, StringType
 
+PRIMARY_KEY_DICT = {
+    'lineitem' : ['L_ORDERKEY','L_LINENUMBER'],
+    'part' : ['P_PARTKEY'],
+    'supplier' : ['S_SUPPKEY'],
+    'partsupp' : ['PS_PARTKEY', 'PS_SUPPKEY'],
+    'nation' : ['N_NATIONKEY'],
+    'region' : ['R_REGIONKEY'],
+    'customer' : ['C_CUSTKEY'],
+    'orders' : ['O_ORDERKEY']
+}
+
 schemas = [
     ('lineitem',
      "lineitem.tbl",
@@ -21,6 +32,7 @@ schemas = [
         StructField("L_SHIPMODE", StringType()),
         StructField("L_COMMENT", StringType())
     ])),
+    
     ('part',
      "part.tbl",
      StructType([
