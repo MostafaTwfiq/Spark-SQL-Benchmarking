@@ -14,7 +14,7 @@ spark = SparkSession.builder.appName("DataDeletionHive") \
     .getOrCreate()
 
 # Drop benchmark database
-spark.sql(f"DROP DATABASE IF EXISTS {hive_database}")
+spark.sql(f"DROP DATABASE IF EXISTS {hive_database} CASCADE")
 
 # Stop the Spark session
 spark.stop()
