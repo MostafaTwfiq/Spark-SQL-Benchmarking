@@ -17,7 +17,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 # Drop benchmark database
-spark.sql(f"DROP DATABASE IF EXISTS {iceberg_database}")
+spark.sql(f"DROP DATABASE IF EXISTS {iceberg_database} CASCADE")
 
 # Stop the Spark session
 spark.stop()
