@@ -7,7 +7,7 @@ import os
 iceberg_host =  sys.argv[1]     # 192.168.168.91
 iceberg_port = sys.argv[2]      # 8020
 iceberg_database = sys.argv[3]  # iceberg_temp
-iceberg_warehouse = sys.argv[4]  
+iceberg_warehouse = sys.argv[4]
 
 # Create a Spark session with Iceberg support and host information
 spark = SparkSession.builder \
@@ -16,7 +16,7 @@ spark = SparkSession.builder \
     .config("spark.sql.catalog.iceberg", "org.apache.iceberg.spark.SparkCatalog") \
     .config("spark.sql.catalog.iceberg.type", "hadoop") \
     .config("spark.sql.catalog.iceberg.warehouse", 
-            f"hadoop://{iceberg_host}:{iceberg_port}/{iceberg_warehouse}") \
+            f"hadoop://{iceberg_host}:{iceberg_port}/{iceberg_warehouse}/{iceberg_database}.db") \
     .getOrCreate()
 
 # Create a Spark session
