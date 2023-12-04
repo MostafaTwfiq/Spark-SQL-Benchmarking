@@ -10,7 +10,10 @@ from MetricsPlotter import MetricsPlotter
 from SparkSubmitExecutor import SparkSubmitExecutor
 import re 
 import subprocess
+import time
 import shutil
+import statistics
+
 
 root_path = None
 logs_path = None
@@ -36,8 +39,9 @@ def read_benchmark_queries(sql_file_path):
         data = file.read()
 
     # Use regular expressions to extract both comments and queries
-    queries_names = re.findall(r'--(.*?)(?=\n|$)', data)
+    queries_names = [s.replace(' ', '\n') for s in re.findall(r'--(.*?)(?=\n|$)', data)]
     queries = re.split(r'--.*?(?=\n|$)|;\s*', data)
+
 
     # Remove leading and trailing whitespace from each query
     queries = [query.strip() for query in queries]
@@ -156,17 +160,19 @@ if __name__ == '__main__':
             print(f"\t\tCompleted running the query on hive.") # Logging
             iceberg_app_id = spark_submit_executor.submit_pyspark(iceberg_query_temp_path, iceberg_connection_args)
             print(f"\t\tCompleted running the query on iceberg.") # Logging
-        
+              
             app_ids.append((hive_app_id, iceberg_app_id))
-        
+            
+        time.sleep(5)  
+        print("Done Running Queries")
         # Fetch Queries Duration
         hive_durations = []
         iceberg_durations = []
         rest = SparkRestAPI(spark_connection['ip'], spark_connection['port'])
         for (hive_app_id, iceberg_app_id) in app_ids:
-            rest.get_sql_duration(rest.get_application_all_sql_metrics(hive_app_id))
+            hive_durations(rest.get_sql_duration(rest.get_application_all_sql_metrics(hive_app_id)))
             print("\t\tQuery duration on hive fetched successfully.") # Logging
-            rest.get_sql_duration(rest.get_application_all_sql_metrics(iceberg_app_id))
+            iceberg_durations.append(rest.get_sql_duration(rest.get_application_all_sql_metrics(iceberg_app_id)))
             print("\t\tQuery duration on iceberg fetched successfully.") # Logging
 
         # Plot metrics
