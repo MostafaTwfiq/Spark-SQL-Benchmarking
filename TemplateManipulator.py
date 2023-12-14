@@ -4,13 +4,15 @@ from jinja2 import Template
 import uuid
 import subprocess
 
+
 class TemplateManipulator:
 
-    def __init__(self, output_folder):
+    def __init__(self, output_folder, logger):
         self.TEMPLATES_FOLDER = './templates'
         self.QUERY_PLACEHOLDER = 'QUERY'
         self.output_folder = output_folder
         self.__add_shemas_to_temp_folder()
+        self.logger = logger
 
     def __add_shemas_to_temp_folder(self):
         command = f'cp {self.TEMPLATES_FOLDER}/schemas.py {self.output_folder}'
@@ -38,8 +40,8 @@ class TemplateManipulator:
 
 class HiveManipulator(TemplateManipulator):
 
-    def __init__(self, output_folder):
-        super().__init__(output_folder)
+    def __init__(self, output_folder, logger):
+        super().__init__(output_folder, logger)
         self.PARTITION_PLACEHOLDER = 'PARTITIONING_DICT'
         self.GENERATE_TABLES_FOLDER = 'GENERATED_TABLES_FOLDER'
 
@@ -47,15 +49,15 @@ class HiveManipulator(TemplateManipulator):
     def set_creation_template_properties(self, table_properties, generated_tables_folder):
         partitioning_dict = self.__extract_or_default_properties(table_properties)
         
-        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'DataCreationHive.py')
-        output_file_path = os.path.join(self.output_folder, f'DataCreationHive_{str(uuid.uuid4()).replace("-", "_")}.py')
+        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'TableCreationHive.py')
+        output_file_path = os.path.join(self.output_folder, f'TableCreationHive_{str(uuid.uuid4()).replace("-", "_")}.py')
         try:
             self.replace_words_in_file(input_file_path, output_file_path, {self.PARTITION_PLACEHOLDER: partitioning_dict,
                                     self.GENERATE_TABLES_FOLDER: generated_tables_folder})
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
         
 
@@ -76,7 +78,7 @@ class HiveManipulator(TemplateManipulator):
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
         
     def create_database_template(self):
@@ -88,7 +90,7 @@ class HiveManipulator(TemplateManipulator):
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
     
     def create_database_deletion_template(self):
@@ -100,7 +102,7 @@ class HiveManipulator(TemplateManipulator):
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
 
 
@@ -108,8 +110,8 @@ class HiveManipulator(TemplateManipulator):
 
 class IcebergManipulator(TemplateManipulator):
 
-    def __init__(self, output_folder):
-        super().__init__(output_folder)
+    def __init__(self, output_folder, logger):
+        super().__init__(output_folder, logger)
         self.PARTITION_PLACEHOLDER = 'PARTITIONING_DICT'
         self.DELETE_PLACEHOLDER = 'DELETE_MODE'
         self.UPDATE_PLACEHOLDER = 'UPDATE_MODE'
@@ -127,14 +129,14 @@ class IcebergManipulator(TemplateManipulator):
                          self.MERGE_PLACEHOLDER: merge_mode,
                          self.GENERATE_TABLES_FOLDER: generated_tables_folder}
         
-        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'DataCreationIceberg.py')
-        output_file_path = os.path.join(self.output_folder, f'DataCreationIceberg_{str(uuid.uuid4()).replace("-", "_")}.py')
+        input_file_path = os.path.join(self.TEMPLATES_FOLDER, 'TableCreationIceberg.py')
+        output_file_path = os.path.join(self.output_folder, f'TableCreationIceberg_{str(uuid.uuid4()).replace("-", "_")}.py')
         try:
             self.replace_words_in_file(input_file_path, output_file_path, modifications)
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
 
 
@@ -165,7 +167,7 @@ class IcebergManipulator(TemplateManipulator):
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None  
 
     def create_database_template(self):
@@ -177,7 +179,7 @@ class IcebergManipulator(TemplateManipulator):
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
     
     def create_database_deletion_template(self):
@@ -189,5 +191,5 @@ class IcebergManipulator(TemplateManipulator):
             return output_file_path
         except Exception as e:
             # TODO: Log the exception here
-            print(f"An error occurred: {e}")
+            self.logger.error(f"An error occurred: {e}")
             return None
