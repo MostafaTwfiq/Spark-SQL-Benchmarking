@@ -1,0 +1,37 @@
+#connection properties
+connections:
+  spark:
+    ip: localhost
+    port: 4040
+  yarn:
+    ip: localhost
+    port: 4444
+  hive:
+    ip: localhost
+    port: 9090
+  hdfs:
+    ip: localhost
+    port: 8080
+    user_folder_path: user/iceberg
+  iceberg:
+    iceberg_warehouse: warehouse/tablespace/external/hive
+#tpch properties
+tpch:
+  generation_path: './data'
+  database_scale_factor: 1
+# List of Analysis groups
+groups:
+  # Analysis group
+  - id: 0
+    table_formats: 
+      hive:
+        # list of tables' partitions
+        partition: 
+          # Table name: Partition By 
+          lineitem_hive: receiptdate
+      iceberg:
+        merge_mode: merge-on-read
+        update_mode: merge-on-read
+        delete_mode: merge-on-read
+        partition: 
+          lineitem_ice: months(receiptdate)
