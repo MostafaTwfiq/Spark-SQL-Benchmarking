@@ -9,14 +9,14 @@ hive_port = sys.argv[2]      # 8020
 hive_database = sys.argv[3]  # iceberg_temp 
 
 # Create a Spark session with Hive support and host information
-spark = SparkSession.builder.appName("DataCreationHive") \
+spark = SparkSession.builder.appName("TableCreationHive") \
     .config("spark.sql.hive.metastore.uris", 
             f"thrift://{hive_host}:{hive_port}") \
     .enableHiveSupport() \
     .getOrCreate()
 
 # Create a Spark session
-# spark = SparkSession.builder.appName("DataCreationHive").getOrCreate()
+# spark = SparkSession.builder.appName("TableCreationHive").getOrCreate()
 
 
 # CHANGE HERE!

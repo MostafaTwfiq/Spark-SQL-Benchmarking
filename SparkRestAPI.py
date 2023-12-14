@@ -10,9 +10,10 @@ ALL_SQL_API = '/sql/'
 SQL_API = f'{ALL_SQL_API}{{ executionid }}'
 
 class SparkRestAPI:
-    def __init__(self, spark_ip, spark_port):
+    def __init__(self, spark_ip, spark_port, logger):
         self.ip = spark_ip
         self.port = spark_port
+        self.logger = logger
 
     def __send_get_request(self, url):
         # Sending a GET request
@@ -23,8 +24,8 @@ class SparkRestAPI:
             # Parse the JSON response
             return response.json()
         else:
-            # If the request was not successful, print the error code
-            print(f"Failed to retrieve data. Status code: {response.status_code}")
+            # If the request was not successful, self.logger.info the error code
+            self.logger.error(f"Failed to retrieve data. Status code: {response.status_code}")
             #TODO: log an error with the url and response code
 
 
@@ -81,6 +82,6 @@ class SparkRestAPI:
 
 if __name__ == '__main__':
     rest = SparkRestAPI('192.168.168.90', '18489')
-    #print(rest.get_application_metrics('application_1700037879106_0121'))
-    print(rest.get_application_duration(rest.get_application_metrics('application_1700037879106_0121')))
-    print(rest.get_sql_duration(rest.get_application_all_sql_metrics('application_1700037879106_0121')))
+    #self.logger.info(rest.get_application_metrics('application_1700037879106_0121'))
+    self.logger.info(rest.get_application_duration(rest.get_application_metrics('application_1700037879106_0121')))
+    self.logger.info(rest.get_sql_duration(rest.get_application_all_sql_metrics('application_1700037879106_0121')))

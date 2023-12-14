@@ -9,7 +9,7 @@ iceberg_warehouse = sys.argv[4]
 
 # Create a Spark session with Iceberg support and host information
 spark = SparkSession.builder \
-    .appName("DataCreationIceberg") \
+    .appName("TableCreationIceberg") \
     .config("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions") \
     .config("spark.sql.catalog.iceberg", "org.apache.iceberg.spark.SparkCatalog") \
     .config("spark.sql.catalog.iceberg.type", "hadoop") \

@@ -1,14 +1,15 @@
 import subprocess
 
 class DataGeneration:
-    def __init__(self, dbgen_path, scale_factor=5):
+    def __init__(self, dbgen_path, logger, scale_factor=5):
         self.dbgen_path = dbgen_path
+        self.logger = logger
         self.scale_factor = scale_factor
 
 
     def generate_data(self, data_path='./data'):
         # TODO: Log Here
-        print(f"Generating Data with Scale Factor = {self.scale_factor}")
+        self.logger.info(f"Generating Data with Scale Factor = {self.scale_factor}")
         self.__precheck_data_directory(data_path)
         
         generate_cmd = f'cd {data_path} && ./dbgen -s {self.scale_factor}'
@@ -36,9 +37,9 @@ class DataGeneration:
         
         # TODO: Log Here
         if result.returncode == 0:
-            print(f"{process} Succeeded.")
+            self.logger.info(f"{process} Succeeded.")
         else:
-            print(f"{process} Failed. Output:\n{result.stdout}")
+            self.logger.error(f"{process} Failed. Output:\n{result.stdout}")
                 
         
 
